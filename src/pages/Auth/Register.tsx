@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Bot, Mail, Lock, User, Sparkles, AlertCircle } from 'lucide-react';
+import { Bot, Mail, Lock, User, AlertCircle } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();
-  const { register, user, error, clearError, loading } = useAuthStore();
+  const { register, error, clearError, loading } = useAuthStore();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
