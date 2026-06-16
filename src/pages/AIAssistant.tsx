@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Bot, MessageSquare, Plus, Trash2, Send, Mic, Paperclip, 
-  Sparkles, CheckSquare, Target, Flame, ChevronRight 
+  Sparkles, Target, Flame 
 } from 'lucide-react';
-import { useAiStore, Conversation } from '../store/aiStore';
-import { GlassCard } from '../components/GlassCard';
+import { useAiStore } from '../store/aiStore';
 
 export const AIAssistant: React.FC = () => {
   const { 
