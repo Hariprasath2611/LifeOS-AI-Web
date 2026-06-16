@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { 
   Bot, CheckSquare, Target, Flame, FileText, 
-  GraduationCap, BarChart2, Calendar, ShieldCheck, ArrowRight, Play, Sparkles
+  GraduationCap, ArrowRight, Play, Sparkles
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 

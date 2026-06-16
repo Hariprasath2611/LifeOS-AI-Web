@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { 
-  Flame, Plus, Calendar, Activity, Sparkles, Check, 
-  Trash2, X, BarChart2, CheckCircle2 
+  Plus, Activity, Sparkles, Check, 
+  Trash2, X 
 } from 'lucide-react';
-import { useHabitStore, Habit } from '../store/habitStore';
+import { useHabitStore } from '../store/habitStore';
+import type { Habit } from '../store/habitStore';
 import { GlassCard } from '../components/GlassCard';
 
 export const Habits: React.FC = () => {
