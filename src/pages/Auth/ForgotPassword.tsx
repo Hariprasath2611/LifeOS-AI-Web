@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Mail, ArrowLeft, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 
 export const ForgotPassword: React.FC = () => {
-  const { forgotPassword, error, clearError, loading } = useAuthStore();
+  const { forgotPassword, error, loading } = useAuthStore();
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
