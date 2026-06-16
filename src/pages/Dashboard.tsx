@@ -72,10 +72,6 @@ export const Dashboard: React.FC = () => {
     toggleHabitDate(id, todayStr);
   };
 
-  const handleQuickLogStudy = () => {
-    logStudySession(25);
-  };
-
   return (
     <div className="space-y-8 animate-in fade-in duration-200">
       
