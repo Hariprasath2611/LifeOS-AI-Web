@@ -10,13 +10,12 @@ router.use(authMiddleware);
  * @desc    Get all habits for user
  */
 router.get('/', async (req: Request, res: Response) => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   try {
     const habits = await prisma.habit.findMany({
       where: { userId }
     });
 
-    // Format output: split history back to array of strings
     const formatted = habits.map(h => ({
       ...h,
       history: h.history ? h.history.split(',') : []
@@ -33,7 +32,7 @@ router.get('/', async (req: Request, res: Response) => {
  * @desc    Create a new habit
  */
 router.post('/', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   const { name, description, frequency, category } = req.body;
 
   if (!name) {
@@ -68,9 +67,9 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
  * @desc    Check/uncheck completion on a date and update streak
  */
 router.post('/:id/toggle', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
-  const { dateStr } = req.body; // e.g. "2026-06-16"
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
+  const { dateStr } = req.body;
 
   if (!dateStr) {
     res.status(400).json({ error: 'Date is required.' });
@@ -96,7 +95,6 @@ router.post('/:id/toggle', async (req: Request, res: Response): Promise<void> =>
       historyArr.push(dateStr);
     }
 
-    // Dynamic Streak Calculation
     let currentStreak = 0;
     let checkDate = new Date();
     
@@ -106,7 +104,6 @@ router.post('/:id/toggle', async (req: Request, res: Response): Promise<void> =>
         currentStreak++;
         checkDate.setDate(checkDate.getDate() - 1);
       } else {
-        // Streak remains alive if we miss checking in today but did check yesterday
         if (i === 0) {
           checkDate.setDate(checkDate.getDate() - 1);
           const yesterdayStr = checkDate.toISOString().split('T')[0];
@@ -140,8 +137,8 @@ router.post('/:id/toggle', async (req: Request, res: Response): Promise<void> =>
  * @desc    Delete a habit
  */
 router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
 
   try {
     const habit = await prisma.habit.findFirst({

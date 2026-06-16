@@ -12,7 +12,7 @@ router.use(authMiddleware);
  * @desc    Get all tasks for logged in user
  */
 router.get('/', async (req: Request, res: Response) => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   try {
     const tasks = await prisma.task.findMany({
       where: { userId },
@@ -29,7 +29,7 @@ router.get('/', async (req: Request, res: Response) => {
  * @desc    Create a new task
  */
 router.post('/', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   const { title, description, priority, status, category, dueDate, isRecurring, recurInterval } = req.body;
 
   if (!title) {
@@ -62,8 +62,8 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
  * @desc    Update an existing task
  */
 router.put('/:id', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
   const updateData = req.body;
 
   try {
@@ -101,8 +101,8 @@ router.put('/:id', async (req: Request, res: Response): Promise<void> => {
  * @desc    Delete a task
  */
 router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
 
   try {
     const task = await prisma.task.findFirst({
