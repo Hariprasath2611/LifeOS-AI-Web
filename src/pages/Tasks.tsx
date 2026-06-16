@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
-  CheckSquare, Plus, BrainCircuit, List, KanBan, 
-  Trash2, Edit, Calendar, AlertTriangle, ArrowRight, X 
+  Plus, BrainCircuit, List, Kanban, 
+  Trash2, Edit, Calendar, ArrowRight, X 
 } from 'lucide-react';
-import { useTaskStore, Task } from '../store/taskStore';
+import { useTaskStore } from '../store/taskStore';
+import type { Task } from '../store/taskStore';
 import { GlassCard } from '../components/GlassCard';
 
 export const Tasks: React.FC = () => {
+  const navigate = useNavigate();
   const { tasks, addTask, updateTask, deleteTask, aiSuggestions, generateAiSuggestions } = useTaskStore();
   const [viewMode, setViewMode] = useState<'kanban' | 'list'>('kanban');
   const [modalOpen, setModalOpen] = useState(false);
