@@ -11,7 +11,7 @@ router.use(authMiddleware);
  * @desc    Get all goals for user including milestones
  */
 router.get('/', async (req: Request, res: Response) => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   try {
     const goals = await prisma.goal.findMany({
       where: { userId },
@@ -28,7 +28,7 @@ router.get('/', async (req: Request, res: Response) => {
  * @desc    Create a new goal
  */
 router.post('/', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   const { title, description, category, timeline, dueDate, milestones } = req.body;
 
   if (!title) {
@@ -63,8 +63,8 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
  * @desc    Add a milestone to a goal
  */
 router.post('/:id/milestones', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
   const { title } = req.body;
 
   if (!title) {
@@ -89,7 +89,6 @@ router.post('/:id/milestones', async (req: Request, res: Response): Promise<void
       }
     });
 
-    // Recalculate progress
     const allMilestones = await prisma.milestone.findMany({ where: { goalId: id } });
     const completed = allMilestones.filter(m => m.completed).length;
     const progress = Math.round((completed / allMilestones.length) * 100);
@@ -110,8 +109,9 @@ router.post('/:id/milestones', async (req: Request, res: Response): Promise<void
  * @desc    Toggle milestone completion status
  */
 router.put('/:goalId/milestones/:milestoneId/toggle', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { goalId, milestoneId } = req.params;
+  const userId = (req as any).userId as string;
+  const goalId = req.params.goalId as string;
+  const milestoneId = req.params.milestoneId as string;
 
   try {
     const goal = await prisma.goal.findFirst({
@@ -137,7 +137,6 @@ router.put('/:goalId/milestones/:milestoneId/toggle', async (req: Request, res: 
       data: { completed: !milestone.completed }
     });
 
-    // Recalculate goal progress
     const allMilestones = await prisma.milestone.findMany({ where: { goalId } });
     const completed = allMilestones.filter(m => m.completed).length;
     const progress = Math.round((completed / allMilestones.length) * 100);
@@ -159,8 +158,8 @@ router.put('/:goalId/milestones/:milestoneId/toggle', async (req: Request, res: 
  * @desc    Generate action plan steps using AI Service
  */
 router.post('/:id/ai-action-plan', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
 
   try {
     const goal = await prisma.goal.findFirst({
@@ -172,10 +171,8 @@ router.post('/:id/ai-action-plan', async (req: Request, res: Response): Promise<
       return;
     }
 
-    // Call AI service
     const aiSteps = await AiService.generateMilestones(goal.title, goal.description || '');
 
-    // Bulk insert milestones
     await prisma.milestone.createMany({
       data: aiSteps.map(title => ({
         title,
@@ -184,7 +181,6 @@ router.post('/:id/ai-action-plan', async (req: Request, res: Response): Promise<
       }))
     });
 
-    // Recalculate progress
     const allMilestones = await prisma.milestone.findMany({ where: { goalId: id } });
     const completed = allMilestones.filter(m => m.completed).length;
     const progress = Math.round((completed / allMilestones.length) * 100);
@@ -209,8 +205,8 @@ router.post('/:id/ai-action-plan', async (req: Request, res: Response): Promise<
  * @desc    Delete goal
  */
 router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
 
   try {
     const goal = await prisma.goal.findFirst({

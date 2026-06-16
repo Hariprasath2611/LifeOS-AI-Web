@@ -11,7 +11,7 @@ router.use(authMiddleware);
  * @desc    Get all notes for user
  */
 router.get('/', async (req: Request, res: Response) => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   try {
     const notes = await prisma.note.findMany({
       where: { userId },
@@ -34,7 +34,7 @@ router.get('/', async (req: Request, res: Response) => {
  * @desc    Create a new note
  */
 router.post('/', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   const { title, content, category, tags } = req.body;
 
   try {
@@ -62,8 +62,8 @@ router.post('/', async (req: Request, res: Response): Promise<void> => {
  * @desc    Update a note
  */
 router.put('/:id', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
   const { title, content, category, tags, favorite } = req.body;
 
   try {
@@ -101,8 +101,8 @@ router.put('/:id', async (req: Request, res: Response): Promise<void> => {
  * @desc    Generate AI Note summary
  */
 router.post('/:id/summarize', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
 
   try {
     const note = await prisma.note.findFirst({
@@ -114,7 +114,6 @@ router.post('/:id/summarize', async (req: Request, res: Response): Promise<void>
       return;
     }
 
-    // Call AI Service
     const summary = await AiService.generateNoteSummary(note.title, note.content);
 
     const updatedNote = await prisma.note.update({
@@ -136,8 +135,8 @@ router.post('/:id/summarize', async (req: Request, res: Response): Promise<void>
  * @desc    Delete note
  */
 router.delete('/:id', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
 
   try {
     const note = await prisma.note.findFirst({
