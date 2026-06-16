@@ -1,0 +1,131 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tasks     Task[]
+  goals     Goal[]
+  habits    Habit[]
+  notes     Note[]
+  skills    Skill[]
+  roadmaps  Roadmap[]
+  sessions  StudySession[]
+}
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  priority    String   // low, medium, high
+  status      String   // todo, in_progress, completed
+  category    String   // Work, Health, Learning, Personal, etc.
+  dueDate     String
+  isRecurring Boolean  @default(false)
+  recurInterval String? // daily, weekly, monthly
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Goal {
+  id                    String      @id @default(uuid())
+  title                 String
+  description           String?
+  category              String      // Career, Health, Wealth, Personal
+  timeline              String      // short_term, long_term
+  progress              Int         @default(0)
+  dueDate               String
+  aiActionPlanGenerated Boolean     @default(false)
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  userId                String
+  user                  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  milestones            Milestone[]
+}
+
+model Milestone {
+  id        String   @id @default(uuid())
+  title     String
+  completed Boolean  @default(false)
+  goalId    String
+  goal      Goal     @relation(fields: [goalId], references: [id], onDelete: Cascade)
+}
+
+model Habit {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  frequency   String   // daily, weekly
+  category    String   // Health, Mindset, Finance, Productive
+  streak      Int      @default(0)
+  history     String   // Comma separated date strings, e.g. "2026-06-15,2026-06-16"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Note {
+  id          String   @id @default(uuid())
+  title       String
+  content     String
+  category    String
+  tags        String   // Comma separated tags
+  favorite    Boolean  @default(false)
+  aiSummary   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Skill {
+  id        String   @id @default(uuid())
+  name      String
+  category  String
+  level     String   // Beginner, Intermediate, Expert
+  progress  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Roadmap {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  steps       String   // JSON stringified steps list
+  projects    String   // JSON stringified projects suggestions
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model StudySession {
+  id        String   @id @default(uuid())
+  duration  Int      // focus block duration in minutes
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
