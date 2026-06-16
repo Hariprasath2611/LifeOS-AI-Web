@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  CheckSquare, Target, Flame, FileText, GraduationCap, 
-  Sparkles, Plus, Clock, BrainCircuit, Play, ArrowRight, Award
+  CheckSquare, Target, Flame, 
+  Sparkles, Clock, BrainCircuit, Play, ArrowRight, Award
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -12,7 +12,6 @@ import { GlassCard } from '../components/GlassCard';
 import { useTaskStore } from '../store/taskStore';
 import { useGoalStore } from '../store/goalStore';
 import { useHabitStore } from '../store/habitStore';
-import { useNoteStore } from '../store/noteStore';
 import { useLearningStore } from '../store/learningStore';
 
 export const Dashboard: React.FC = () => {
@@ -20,13 +19,12 @@ export const Dashboard: React.FC = () => {
 
   // Stores data
   const { tasks, moveTask } = useTaskStore();
-  const { goals, toggleMilestone } = useGoalStore();
+  const { goals } = useGoalStore();
   const { habits, toggleHabitDate } = useHabitStore();
-  const { notes } = useNoteStore();
-  const { skills, pomodoroMinutes, logStudySession } = useLearningStore();
+  const { pomodoroMinutes } = useLearningStore();
 
   const [focusText, setFocusText] = useState('Build LifeOS AI Frontend Dashboard');
-  const [sessionTime, setSessionTime] = useState(25);
+  const sessionTime = 25;
   const [timerRunning, setTimerRunning] = useState(false);
 
   // Quick stats calculations
