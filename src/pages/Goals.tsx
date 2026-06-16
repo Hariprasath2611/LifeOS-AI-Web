@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { 
   Target, Plus, Calendar, Milestone as MilestoneIcon, 
-  Sparkles, CheckSquare, Trash2, X, Compass, Loader2
+  Sparkles, Trash2, X, Compass, Loader2
 } from 'lucide-react';
-import { useGoalStore, Goal, Milestone } from '../store/goalStore';
+import { useGoalStore } from '../store/goalStore';
+import type { Goal } from '../store/goalStore';
 import { GlassCard } from '../components/GlassCard';
 
 export const Goals: React.FC = () => {
