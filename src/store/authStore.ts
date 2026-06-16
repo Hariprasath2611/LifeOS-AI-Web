@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { api } from '../services/api';
 
 export interface User {
   uid: string;
@@ -42,25 +43,28 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   login: async (email, password) => {
     set({ loading: true, error: null });
     try {
-      // Mock Firebase API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
       if (password.length < 6) {
         throw new Error("Password must be at least 6 characters.");
       }
 
+      // Sync with backend API
+      const res = await api.post('/auth/login', { email, name: email.split('@')[0] });
+      const { user: backendUser } = res.data;
+
       const mockUser: User = {
-        uid: 'user_' + Math.random().toString(36).substr(2, 9),
-        email,
-        displayName: email.split('@')[0],
+        uid: backendUser.id,
+        email: backendUser.email,
+        displayName: backendUser.name || email.split('@')[0],
         emailVerified: true,
-        createdAt: new Date().toISOString(),
+        createdAt: backendUser.createdAt,
       };
 
       localStorage.setItem('lifeos_user', JSON.stringify(mockUser));
       set({ user: mockUser, loading: false });
     } catch (err: any) {
-      set({ error: err.message || "Failed to log in", loading: false });
+      set({ error: err.response?.data?.error || err.message || "Failed to log in", loading: false });
       throw err;
     }
   },
@@ -68,31 +72,35 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   register: async (email, password, name) => {
     set({ loading: true, error: null });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 600));
 
       if (password.length < 6) {
         throw new Error("Password must be at least 6 characters.");
       }
 
+      // Sync with backend API
+      const res = await api.post('/auth/login', { email, name });
+      const { user: backendUser } = res.data;
+
       const mockUser: User = {
-        uid: 'user_' + Math.random().toString(36).substr(2, 9),
-        email,
-        displayName: name || email.split('@')[0],
+        uid: backendUser.id,
+        email: backendUser.email,
+        displayName: backendUser.name || name || email.split('@')[0],
         emailVerified: false,
-        createdAt: new Date().toISOString(),
+        createdAt: backendUser.createdAt,
       };
 
       localStorage.setItem('lifeos_user', JSON.stringify(mockUser));
       set({ user: mockUser, loading: false });
     } catch (err: any) {
-      set({ error: err.message || "Failed to register", loading: false });
+      set({ error: err.response?.data?.error || err.message || "Failed to register", loading: false });
       throw err;
     }
   },
 
   logout: async () => {
     set({ loading: true });
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 400));
     localStorage.removeItem('lifeos_user');
     set({ user: null, loading: false });
   },
@@ -101,8 +109,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ loading: true, error: null });
     try {
       console.log("Mock sending password reset link to:", email);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      // Simulation success
+      await new Promise((resolve) => setTimeout(resolve, 500));
       set({ loading: false });
     } catch (err: any) {
       set({ error: err.message || "Failed to send reset link", loading: false });
@@ -113,7 +120,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   verifyEmail: async () => {
     set({ loading: true, error: null });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       const currentUser = get().user;
       if (currentUser) {
         const updatedUser = { ...currentUser, emailVerified: true };
@@ -130,19 +137,27 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   loginWithGoogle: async () => {
     set({ loading: true, error: null });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1200));
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      const res = await api.post('/auth/login', { 
+        email: 'emerald.coder@gmail.com', 
+        name: 'Emerald Coder' 
+      });
+      const { user: backendUser } = res.data;
+
       const mockUser: User = {
-        uid: 'google_user_' + Math.random().toString(36).substr(2, 9),
-        email: 'emerald.coder@gmail.com',
-        displayName: 'Emerald Coder',
+        uid: backendUser.id,
+        email: backendUser.email,
+        displayName: backendUser.name || 'Emerald Coder',
         photoURL: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop',
         emailVerified: true,
-        createdAt: new Date().toISOString(),
+        createdAt: backendUser.createdAt,
       };
+
       localStorage.setItem('lifeos_user', JSON.stringify(mockUser));
       set({ user: mockUser, loading: false });
     } catch (err: any) {
-      set({ error: err.message || "Google Login failed", loading: false });
+      set({ error: err.response?.data?.error || err.message || "Google Login failed", loading: false });
       throw err;
     }
   },
