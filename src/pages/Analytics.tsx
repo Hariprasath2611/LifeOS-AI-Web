@@ -4,8 +4,8 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer 
 } from 'recharts';
 import { 
-  BarChart2, CheckCircle2, Flame, GraduationCap, 
-  Target, TrendingUp, Calendar, Zap 
+  CheckCircle2, Flame, GraduationCap, 
+  Target, TrendingUp, Zap 
 } from 'lucide-react';
 import { GlassCard } from '../components/GlassCard';
 import { useTaskStore } from '../store/taskStore';
@@ -33,7 +33,6 @@ export const Analytics: React.FC = () => {
 
   // Goal statistics
   const totalGoals = goals.length;
-  const completedGoals = goals.filter(g => g.progress === 100).length;
   const averageGoalProgress = totalGoals > 0 
     ? Math.round(goals.reduce((acc, g) => acc + g.progress, 0) / totalGoals)
     : 0;
