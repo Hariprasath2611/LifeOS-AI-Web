@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus, 
-  CheckSquare, Flame, Target, X, Clock, HelpCircle 
+  X, HelpCircle 
 } from 'lucide-react';
 import { useTaskStore } from '../store/taskStore';
 import { useHabitStore } from '../store/habitStore';
