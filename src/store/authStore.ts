@@ -100,6 +100,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   forgotPassword: async (email) => {
     set({ loading: true, error: null });
     try {
+      console.log("Mock sending password reset link to:", email);
       await new Promise((resolve) => setTimeout(resolve, 1000));
       // Simulation success
       set({ loading: false });
