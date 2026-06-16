@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { 
   FileText, Search, Plus, Star, Tag, Eye, Edit3, 
-  Sparkles, Trash2, ArrowUpRight, CheckCircle2 
+  Sparkles, Trash2 
 } from 'lucide-react';
-import { useNoteStore, Note } from '../store/noteStore';
-import { GlassCard } from '../components/GlassCard';
+import { useNoteStore } from '../store/noteStore';
 
 export const Notes: React.FC = () => {
   const { 
