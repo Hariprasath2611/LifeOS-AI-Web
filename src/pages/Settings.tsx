@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  Settings as SettingsIcon, User, Shield, Bell, Sparkles, 
+  User, Shield, Bell, Sparkles, 
   Share2, Download, CheckCircle2, AlertCircle, Save 
 } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
@@ -18,7 +18,7 @@ export const Settings: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('profile');
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  const { user, updateProfile } = useAuthStore() as any; // mock cast
+  const { user } = useAuthStore() as any; // mock cast
 
   // Profile Form States
   const [displayName, setDisplayName] = useState(user?.displayName || 'LifeOS Developer');
