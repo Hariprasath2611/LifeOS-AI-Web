@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { 
   GraduationCap, Plus, Clock, Play, Pause, RotateCcw, 
-  Sparkles, CheckSquare, Trash2, ArrowUpRight, CheckCircle2,
-  ListTodo, Loader2, BookOpen
+  Sparkles, Loader2, BookOpen
 } from 'lucide-react';
-import { useLearningStore, Skill, Roadmap } from '../store/learningStore';
+import { useLearningStore } from '../store/learningStore';
 import { GlassCard } from '../components/GlassCard';
 
 export const LearningHub: React.FC = () => {
