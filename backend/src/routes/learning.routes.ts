@@ -10,7 +10,7 @@ router.use(authMiddleware);
  * @desc    Get all skills for user
  */
 router.get('/skills', async (req: Request, res: Response) => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   try {
     const skills = await prisma.skill.findMany({
       where: { userId }
@@ -26,7 +26,7 @@ router.get('/skills', async (req: Request, res: Response) => {
  * @desc    Create a new skill tracking
  */
 router.post('/skills', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   const { name, category, level } = req.body;
 
   if (!name) {
@@ -55,8 +55,8 @@ router.post('/skills', async (req: Request, res: Response): Promise<void> => {
  * @desc    Update skill progress percentage
  */
 router.put('/skills/:id', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
-  const { id } = req.params;
+  const userId = (req as any).userId as string;
+  const id = req.params.id as string;
   const { progress } = req.body;
 
   try {
@@ -85,7 +85,7 @@ router.put('/skills/:id', async (req: Request, res: Response): Promise<void> => 
  * @desc    Log a Pomodoro study session
  */
 router.post('/sessions', async (req: Request, res: Response): Promise<void> => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   const { duration } = req.body; // in minutes
 
   if (!duration) {
@@ -111,7 +111,7 @@ router.post('/sessions', async (req: Request, res: Response): Promise<void> => {
  * @desc    Get aggregated focus session minutes
  */
 router.get('/sessions/total', async (req: Request, res: Response) => {
-  const userId = (req as any).userId;
+  const userId = (req as any).userId as string;
   try {
     const aggregates = await prisma.studySession.aggregate({
       where: { userId },
