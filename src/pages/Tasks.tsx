@@ -116,7 +116,7 @@ export const Tasks: React.FC = () => {
               className={`p-2 rounded-lg transition-all ${viewMode === 'kanban' ? 'bg-[#1E1E1E] text-[#00FF88]' : 'text-[#A0A0A0] hover:text-white'}`}
               title="Kanban Board"
             >
-              <KanBan className="w-4 h-4" />
+              <Kanban className="w-4 h-4" />
             </button>
             <button
               onClick={() => setViewMode('list')}
